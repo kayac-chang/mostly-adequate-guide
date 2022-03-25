@@ -1,106 +1,63 @@
-# Chapter 01: What Ever Are We Doing?
-
 # Chapter 01: 是要衝啥毀？
-
-## Introductions
 
 ## 介紹
 
-Hi there! I'm Professor Franklin Frisby. Pleased to make your acquaintance.
 哩厚！我是 Franklin Frisby 教授。很榮幸認識妳。
-
-We'll be spending some time together,
 接下來我們會共度一段時光，
-as I'm supposed to teach you a bit about functional programming.
 因為我要教你一些函式編程囉！
 
-But enough about me, what about you?
 關於我就介紹到這邊，來談談你怎麼樣？
-
-I'm hoping that you're at least a bit familiar with the JavaScript language,
 我希望你至少有一些熟悉 JavaScript 程式語言，
-have a teensy bit of Object-Oriented experience,
 也有一點點 物件導向 的經驗，
-and fancy yourself a working class programmer.
 而且覺得自己算是合格的工程師了。
-
-You don't need to have a PhD in Entomology, you just need to know how to find and kill some bugs.
 你不需要拿個昆蟲學博士也能抓出 Bug 並宰了他。
 
-I won't assume that you have any previous functional programming knowledge,
 我不會預設你之前有任何 函式編程 相關的知識，
-because we both know what happens when you assume.
 畢竟我們都知道預設立場的結果(就是讓你我都難堪)。
 
-I will, however, expect you to have run into some of the unfavorable situations that arise when working with
 但我猜你應該有經歷過一些不太好的狀況，
-mutable state, unrestricted side effects, and unprincipled design.
 像是 mutable state (可變動狀態)，unrestricted side effects (無節制的副作用)，還有 unprincipled design (毫無理由的設計)。
 
-Now that we've been properly introduced, let's get on with it.
 介紹到此，讓我們開始吧。
-
-The purpose of this chapter is to give you a feel for what we're after when we write functional programs.
 本章節的目標是讓你對 函式編程 有個初步的了解。
 
-In order to be able to understand the following chapters, we must have some idea about what makes a program _functional_.
 為了能夠了解接下來的章節，我們要知道怎麼樣的寫算是 函式編程。
-
-Otherwise we'll find ourselves scribbling aimlessly, avoiding objects at all costs - a clumsy endeavor indeed.
 不然我們會發現自己在胡搞瞎搞，不分青紅皂白的排斥使用物件 - 鬼打牆。
-
-We need a clear bullseye to hurl our code at, some celestial compass for when the waters get rough.
 我們的代碼需要明確的準則，就像浪潮之中需要羅盤指引。
 
-Now, there are some general programming principles -
 現在，已經有些通用的編程原則 -
-various acronymic credos that guide us through the dark tunnels of any application:
 各種縮寫詞會帶領我們走過任何軟體開發的逆境：
 
-DRY (don't repeat yourself),
-不要跳針
+> DRY (don't repeat yourself),
+> 不要跳針
 
-YAGNI (ya ain't gonna need it),
-你不會用到
+> YAGNI (ya ain't gonna need it),
+> 你不會用到
 
-loose coupling high cohesion,
-高內聚低耦合
+> loose coupling high cohesion,
+> 高內聚低耦合
 
-the principle of least surprise,
-意外最小化
+> the principle of least surprise,
+> 意外最小化
 
-single responsibility,
-單一原則
+> single responsibility,
+> 單一原則
 
-and so on.
 之類的。
 
-I won't belabor you by listing each and every guideline I've heard throughout the years...
 我當然不會囉哩八唆的把我這些年聽到的原則全部列出來
-
-The point of the matter is that they hold up in a functional setting,
 這邊的重點在於他同樣適用於 函式編成，
-although they're merely tangential to our ultimate goal.
 雖然跟我們接下來要討論的沒太大關係。
 
-What I'd like you to get a feel for now, before we get any further,
 在我們深入探討之前，我想先透過這個章節給你一種感覺，
-is our intention when we poke and prod at the keyboard; our functional Xanadu.
 讓你在敲鍵盤的時候能體會到函式極樂世界。
 
 <!--BREAK-->
 
-## A Brief Encounter
-
 ## 舉個例子
 
-Let's start with a touch of insanity. Here is a seagull application.
 我們從一個很蠢的例子開始。下面是海鷗應用程式。
-
-When flocks conjoin they become a larger flock, and when they breed, they increase by the number of seagulls with whom they're breeding.
 當鳥群合併變成更大的鳥群，然後他們會繁殖，增加的數量就是繁殖出的海鷗數量。
-
-Now, this is not intended to be good Object-Oriented code, mind you, it is here to highlight the perils of our modern, assignment based approach. Behold:
 注意，以下不是好的物件導向程式碼，他只是拿來強調這種變量賦值的弊端。
 
 ```js
@@ -130,25 +87,15 @@ const result = flockA
 // 32
 ```
 
-Who on earth would craft such a ghastly abomination?
 應該沒人會寫出這種鬼東西吧？
-It is unreasonably difficult to keep track of the mutating internal state.
 他讓內部可變狀態變得非常難以追蹤，
-And, good heavens, the answer is even incorrect!
 然後，更棒的，答案還是錯的！
-
-It should have been `16`, but `flockA` wound up permanently altered in the process.
 他應該要是 `16`，但因為 `flockA` 在運算過程中被改變了。
-
-Poor `flockA`. This is anarchy in the I.T.! This is wild animal arithmetic!
 可憐的 `flockA`。這完全歸功於 I.T 野蠻的計算方式！
 
-If you don't understand this program, it's okay, neither do I.
 如果你看嘸這段程式，沒關係拉，我也看嘸。
-The point to remember here is that state and mutable values are hard to follow, even in such a small example.
 重點是狀態跟數值異動在這邊非常難追蹤，就算是這麼小的範例。
 
-Let's try again, this time using a more functional approach:
 讓我們再試一次，這次來換成稍微接近 函式編程 的做法：
 
 ```js
@@ -165,24 +112,16 @@ const result = conjoin(
 // 16
 ```
 
-Well, this time we got the right answer. With much less code.
 好喔，這次我們有正確答案了，還少寫了很多程式碼。
-The function nesting is a tad confusing... (we'll remedy this situation in ch5).
-但函式包來包去有點讓人費解... ( 我們會在第五章解決這個問題 )
+雖然函式包來包去有點讓人費解... ( 我們會在第五章解決這個問題 )。
 
-It's better, but let's dig a little bit deeper.
-好多了，但讓我們再更深入鑽研一些。
-There are benefits to calling a spade a spade.
+但好多了，讓我們再更深入鑽研一些，
 這裏有些寶物值得我們挖掘。
 
-Had we scrutinized our custom functions more closely,
 當我們把這段程式碼分析透徹之後，
-we would have discovered that we're just working with simple addition (`conjoin`) and multiplication (`breed`).
 會發現，他不過就是在做簡單的 加法 (`conjoin`) 跟 乘法 (`breed`)。
 
-There's really nothing special at all about these two functions other than their names.
 他根本除了名字之外就沒啥難懂的地方了。
-Let's rename our custom functions to `multiply` and `add` in order to reveal their true identities.
 我們來重新命名一下，看看他的真相。
 
 ```js
@@ -199,7 +138,6 @@ const result = add(
 // 16
 ```
 
-And with that, we gain the knowledge of the ancients:
 這樣一來，你就發現這不就是：
 
 ```js
@@ -216,13 +154,9 @@ add(x, 0) === x;
 multiply(x, add(y, z)) === add(multiply(x, y), multiply(x, z));
 ```
 
-Ah yes, those old faithful mathematical properties should come in handy.
 喔！是的，這些經典數學定律遲早會遇到。
-Don't worry if you didn't know them right off the top of your head.
 先不用擔心如果你對這個毫無印象，
-For a lot of us, it's been a while since we learned about these laws of arithmetic.
 對大多數人來說，這早就還給老師不知道幾年了。
-Let's see if we can use these properties to simplify our little seagull program.
 讓我們再看看能否運用這些定律還簡化我們的小程式。
 
 ```js
@@ -237,62 +171,37 @@ add(multiply(flockB, flockA), multiply(flockA, flockB));
 multiply(flockB, add(flockA, flockA));
 ```
 
-Brilliant! We didn't have to write a lick of custom code other than our calling function.
 水拉！除了調用函式，一點多餘的程式都不用寫。
-We include `add` and `multiply` definitions here for completeness,
 當然我們在這定義 `add` 跟 `multiply` 是為了程式的完整性，
-but there is really no need to write them -
 但其實根本就不需要，
-we surely have an `add` and `multiply` provided by some existing library.
 我們可以保證，`add` 跟 `multiply` 肯定早就存在某個 Library 之中了。
 
-You may be thinking "how very strawman of you to put such a mathy example up front".
 你可能在想 “你也太偷換概念了吧！居然舉了個數學的例子”。
-Or "real programs are not this simple and cannot be reasoned about in such a way."
 或是 “真實世界的程式比這麼複雜多了，不能這麼簡單作結論”。
 
-I've chosen this example because most of us already know about addition and multiplication,
 我之所以會選這個例子，是因為絕大多數的人都已經知道怎麼做加法跟乘法，
-so it's easy to see how math is very useful for us here.
 所以很容易就能理解數學可以如何被我們運用。
 
-Don't despair -
 不用絕望 -
-throughout this book, we'll sprinkle in some category theory, set theory, and lambda calculus and write real world examples
 透過這本書，我們還會討論到 範疇論 (category theory)， 集合論 (set theory)， lambda 演算 (lambda calculus) 還有一些真實世界的範例，
-that achieve the same elegant simplicity and results as our flock of seagulls example.
 而且其簡潔度跟準確度一點也不輸這的海鷗程式碼。
 
-You needn't be a mathematician either.
 你不需要成為一個數學家，
-It will feel natural and easy, just like you were using a "normal" framework or API.
 他將會非常自然且簡單，就像你在使用一般的框架跟函式庫。
 
-It may come as a surprise to hear that we can write full, everyday applications along the lines of the functional analog above.
 你聽到也許會覺得驚訝，但我們確實是遵循著函式編程的方式，撰寫完整的，日常的應用程序。
-Programs that have sound properties. Programs that are terse, yet easy to reason about.
 有著優異性能，且簡潔容易推導的應用程序。
-Programs that don't reinvent the wheel at every turn.
 且不用每次都重造輪子。
 
-Lawlessness is good if you're a criminal, but in this book, we'll want to acknowledge and obey the laws of math.
 如果你是職業罪犯那違法可能是件好事，但在本書，我們希望遵守數學的法律。
 
-We'll want to use a theory where every piece tends to fit together so politely.
 我們希望能夠完美的接合我們用到的所有理論，
-We'll want to represent our specific problem in terms of generic, composable bits and then exploit their properties for our own selfish benefit.
 希望能透過某種 通用 且 可組合 的元件 來表示我們的特定問題，然後利用這些特性來解決我們的問題。
-It will take a bit more discipline than the "anything goes" approach of imperative programming
 他將會變得比起 命令式編程那種 “只能跑” 的程式碼來的更有紀律。
-(we'll go over the precise definition of "imperative" later in the book, but for now consider it anything other than functional programming).
 (我們之後會介紹命令式的精確定義，這邊先暫時想成除了函式編程之外的其他方式)
-The payoff of working within a principled, mathematical framework will truly astound you.
 函式編成會帶給你更多的約束，但你會驚訝於這種強約束，數學性的 “框架” 所帶來的回報。
 
-We've seen a flicker of our functional northern star,
 我們已經看到了函式編程的北極星了，
-but there are a few concrete concepts to grasp before we can really begin our journey.
 但在真正開始我們的旅程之前，我們要先掌握具體的基本觀念。
 
-[Chapter 02: First Class Functions](ch02.md)
 [Chapter 02: 一級函式](ch02.md)
