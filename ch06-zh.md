@@ -14,7 +14,7 @@
 陳述式，與之相對的就是 命令式，
 就是我們將透過陳述的方式來取代一步接一步的指令。
 
-像是 SQL,
+像是 SQL ，
 並非像 "首先做這個，再來做那個" 的操作方式，
 而是陳述了你想要對資料庫做些什麼，
 我們並沒有幫他決定要如何達成這件事，他自己可以決定。
@@ -36,7 +36,7 @@ for (let i = 0; i < cars.length; i += 1) {
 const makes = cars.map((car) => car.make);
 ```
 
-命令式的迴圈需要先申明初始化陣列。
+命令式的迴圈需要先聲明初始化陣列。
 再繼續往下之前編譯器需要先執行這段初始化。
 然後它會直接迭代過清單裡的所有的 car，
 並手動增加計數器，並把各種哩哩摳摳的東西都露骨的展示出來。
@@ -181,7 +181,7 @@ app("cats");
 
 <img src="images/console_ss.png" alt="console response" />
 
-我们想要從透過這個 json 來建立圖片，
+我們想要從透過這個 json 來建立圖片，
 看起来 `mediaUrls` 都在 `items` 中的每个 `media` 的 `m` 屬性上。
 
 不論如何，為了取得巢狀屬性資料，
@@ -216,7 +216,7 @@ const app = compose(Impure.getJSON(render), url);
 這將會粗獷的將 `mediaUrls` 全都輸出到畫面。
 
 最後就是把 `mediaUrls` 綁到 `images` 上。
-在大型的應用程式，我們會透過一些 template/dom 函式庫像是 Handlebars 或 React 來處理這段。
+在大型的應用程式，我們會透過一些 template / dom 函式庫像是 Handlebars 或 React 來處理這段。
 在這邊，我們只需要 img tag 所以用 jQuery 就可以了。
 
 ```js
